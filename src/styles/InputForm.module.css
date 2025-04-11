@@ -1,0 +1,39 @@
+.form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* 各入力欄の間隔 */
+    width: 350px;
+    /* フォームの幅を少し広げる */
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    /* ラベルのフォントサイズ */
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    /* paddingを少し増やす */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* paddingを含めてwidth 100%にする */
+    font-size: 16px;
+}
+
+/* select要素にもinputスタイルを適用 */
+select.input {
+    cursor: pointer;
+    appearance: none;
+    /* デフォルトの矢印を消す（ブラウザ依存） */
+    background-color: white;
+    padding-right: 30px;
+    /* 矢印用スペース（疑似要素で追加する場合） */
+    /* 必要であればカスタム矢印を疑似要素で追加 */
+}

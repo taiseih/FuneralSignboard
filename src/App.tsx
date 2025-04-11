@@ -1,79 +1,87 @@
-import React, { useState, useRef } from 'react'
-import html2canvas from 'html2canvas'
-import { Button } from './components/Button'
-import './App.css'
+import React, { useState, useRef, useCallback } from 'react';
+import html2canvas from 'html2canvas';
+import Preview from './components/Preview/Preview';
+import InputForm from './components/InputForm/InputForm';
+import './styles/App.css'; // Appコンポーネント用のCSS (レイアウト変更を反映)
 
-const backgroundImages = Array.from({ length: 10 }, (_, i) => `/bg${i + 1}.png`)
-const fontSizes = ['text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl']
+// 背景画像リスト
+const backgroundImages = Array.from({ length: 10 }, (_, i) => `/assets/bg${i + 1}.png`); // パスを確認
 
 const App: React.FC = () => {
-  const [lastName, setLastName] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [background, setBackground] = useState<string>(backgroundImages[0])
-  const [customDate, setCustomDate] = useState<string>(() => {
-    const today = new Date()
-    return new Intl.DateTimeFormat('ja-JP-u-ca-japanese', {
-      era: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    }).format(today)
-  })
-  const [nameSize, setNameSize] = useState<string>('text-4xl')
-  const [dateSize, setDateSize] = useState<string>('text-3xl')
+  // --- State Definitions (変更なし) ---
+  const [lastName, setLastName] = useState<string>('山田');
+  const [firstName, setFirstName] = useState<string>('太郎');
+  const [background, setBackground] = useState<string>(backgroundImages[0]);
+  const [eventType, setEventType] = useState<string>('通夜・告別式');
+  const [eventDate, setEventDate] = useState<string>('四月十二日');
+  const [startTime, setStartTime] = useState<string>('十八時〇〇分');
+  const [endTime, setEndTime] = useState<string>('十九時〇〇分');
 
-  const previewRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
+  // --- Download Handler (変更なし) ---
+  const handleDownload = useCallback(async () => {
     if (previewRef.current) {
-      const canvas = await html2canvas(previewRef.current)
-      const link = document.createElement('a')
-      link.download = 'preview.png'
-      link.href = canvas.toDataURL('image/png')
-      link.click()
+      try {
+        const canvas = await html2canvas(previewRef.current, {
+          useCORS: true,
+          backgroundColor: null,
+          scale: window.devicePixelRatio > 1 ? 2 : 1,
+        });
+        const link = document.createElement('a');
+        link.download = `announcement_${lastName}${firstName}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (error) {
+        console.error("画像のダウンロードに失敗しました:", error);
+      }
     }
-  }
+  }, [lastName, firstName]);
+
+  // --- Ceremony Details String (変更なし) ---
+  const ceremonyDetails = `${eventType} ${eventDate} ${startTime}～${endTime}`;
+
+  // --- Input Change Handlers (変更なし) ---
+  const handleLastNameChange = useCallback((value: string) => setLastName(value), []);
+  const handleFirstNameChange = useCallback((value: string) => setFirstName(value), []);
+  const handleEventTypeChange = useCallback((value: string) => setEventType(value), []);
+  const handleEventDateChange = useCallback((value: string) => setEventDate(value), []);
+  const handleStartTimeChange = useCallback((value: string) => setStartTime(value), []);
+  const handleEndTimeChange = useCallback((value: string) => setEndTime(value), []);
+  const handleBackgroundChange = useCallback((value: string) => setBackground(value), []);
+
 
   return (
-    <div className="container">
-      {/* プレビューエリア */}
-      <div className="preview" ref={previewRef}>
-        <div
-          className="preview-background"
-          style={{ backgroundImage: `url(${background})` }}
-        >
-          <div className={`kanji-date vertical-text ${dateSize}`}>
-            {customDate}
-          </div>
-          <div className={`full-name vertical-text center-name ${nameSize}`}>
-            {lastName + firstName}
-          </div>
-        </div>
-      </div>
+    // className は App.css で定義されたものを使用
+    <div className="appContainer">
+      <Preview
+        ref={previewRef}
+        lastName={lastName}
+        firstName={firstName}
+        eventDetails={ceremonyDetails}
+        background={background}
+      />
 
-      {/* 入力フォーム */}
-      <div className="form">
-        <div>
-          <label className="label">名字</label>
-          <input type="text" className="input" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-        </div>
-        <div>
-          <label className="label">名前</label>
-          <input type="text" className="input" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-        </div>
-        <div>
-          <label className="label">日付（漢字表記）</label>
-          <input type="text" className="input" value={customDate} onChange={(e) => setCustomDate(e.target.value)} />
-        </div>
-        <div>
-          <label className="label">背景テンプレート</label>
-          <select className="input" value={background} onChange={(e) => setBackground(e.target.value)}>
-            {backgroundImages.map((img, idx) => (
-              <option key={idx} value={img}>背景 {idx + 1}</option>
-            ))}
-          </select>
-        </div>
-        <Button onClick={handleDownload}>ダウンロード</Button>
-      </div>
+      <InputForm
+        lastName={lastName}
+        onLastNameChange={handleLastNameChange}
+        firstName={firstName}
+        onFirstNameChange={handleFirstNameChange}
+        eventType={eventType}
+        onEventTypeChange={handleEventTypeChange}
+        eventDate={eventDate}
+        onEventDateChange={handleEventDateChange}
+        startTime={startTime}
+        onStartTimeChange={handleStartTimeChange}
+        endTime={endTime}
+        onEndTimeChange={handleEndTimeChange}
+        background={background}
+        onBackgroundChange={handleBackgroundChange}
+        backgroundImages={backgroundImages}
+        onDownload={handleDownload}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -1,0 +1,16 @@
+.button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+    /* ホバー効果をスムーズに */
+}
+
+.button:hover {
+    background-color: #0056b3;
+}

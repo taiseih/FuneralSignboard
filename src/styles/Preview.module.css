@@ -1,0 +1,95 @@
+/* --- Preview.module.css --- */
+
+/* .previewWrapper, .preview, .previewBackground, .verticalText, .eventDetails は前の修正から変更なし */
+.previewWrapper {
+    width: 256px;
+    height: 576px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    font-family: 'MS Mincho', 'Hiragino Mincho ProN', serif;
+    flex-shrink: 0;
+}
+
+.preview {
+    width: 100%;
+    height: 100%;
+}
+
+.previewBackground {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    color: black;
+}
+
+.verticalText {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: pre-wrap;
+    letter-spacing: 0.1em;
+}
+
+.eventDetails {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    height: auto;
+    max-height: 20%;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+
+/* --- 名前エリア全体のスタイル --- */
+.fullName {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
+    max-height: 75%;
+    /* 上下のスペースを考慮 */
+    /* ↓ text-align を left に変更 (縦書きでは上揃えに相当) */
+    text-align: left;
+    /* ↓ overflow を hidden にして、万が一はみ出ても影響を抑える */
+    overflow: hidden;
+}
+
+/* --- 名前部分（改行用ラッパー） - フォントサイズをさらに縮小 --- */
+.nameWrap {
+    /* ↓ フォントサイズを小さくして改行を防ぐ or 少なくする */
+    font-size: 36px;
+    /* さらに縮小 (必要なら 32px なども試す) */
+    font-weight: bold;
+    display: inline-block;
+    line-height: 1.3;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+}
+
+/* --- 「故」のスタイル - フォントサイズ維持 --- */
+.deceased {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 0.8em;
+}
+
+/* --- 「儀」のスタイル - フォントサイズ維持 --- */
+.ceremony {
+    font-size: 22px;
+    display: block;
+    margin-top: 0.8em;
+    margin-bottom: 0.1em;
+}
+
+/* --- 「葬儀式場」のスタイル - フォントサイズ維持 --- */
+.hall {
+    font-size: 22px;
+    display: block;
+}

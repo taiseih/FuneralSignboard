@@ -1,0 +1,22 @@
+.appContainer {
+  display: flex;
+  /* Flexbox を有効化 */
+  flex-direction: row;
+  /* 子要素を横に並べる (デフォルト) */
+  justify-content: center;
+  /* 中央寄せ */
+  align-items: flex-start;
+  /* 上端揃え */
+  padding: 30px;
+  /* 全体のパディングを増やす */
+  gap: 40px;
+  /* プレビューとフォームの間隔 */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* body スタイルは変更なし */
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
