@@ -2,8 +2,19 @@ import React, { useState, useRef } from 'react'
 import html2canvas from 'html2canvas'
 import { Button } from './components/Button'
 import './App.css'
+const backgroundImages = [
+  '/bg1.png',
+  '/bg2.png',
+  '/bg3.png',
+  '/bg4.png',
+  '/bg5.png',
+  '/bg6.png',
+  '/bg7.png',
+  '/bg8.png',
+  '/bg9.png',
+  '/38EAE8D8E62C1BFD715E571DBDEB46ADE38161FD.jpeg', // ← これが追加した画像
+]
 
-const backgroundImages = Array.from({ length: 10 }, (_, i) => `/bg${i + 1}.png`)
 const fontSizes = ['text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl']
 
 const App: React.FC = () => {
@@ -16,6 +27,7 @@ const App: React.FC = () => {
       era: 'long', year: 'numeric', month: 'long', day: 'numeric'
     }).format(today)
   })
+  const [customTime, setCustomTime] = useState<string>('')
   const [nameSize, setNameSize] = useState<string>('text-4xl')
   const [dateSize, setDateSize] = useState<string>('text-3xl')
 
@@ -33,6 +45,7 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
+      
       {/* プレビューエリア */}
       <div className="preview" ref={previewRef}>
         <div
@@ -40,7 +53,7 @@ const App: React.FC = () => {
           style={{ backgroundImage: `url(${background})` }}
         >
           <div className={`kanji-date vertical-text ${dateSize}`}>
-            {customDate}
+            {customDate} {customTime}
           </div>
           <div className={`full-name vertical-text center-name ${nameSize}`}>
             {lastName + firstName}
@@ -61,6 +74,10 @@ const App: React.FC = () => {
         <div>
           <label className="label">日付（漢字表記）</label>
           <input type="text" className="input" value={customDate} onChange={(e) => setCustomDate(e.target.value)} />
+        </div>
+        <div>
+          <label className="label">時刻（漢字表記）</label>
+          <input type="text" className="input" value={customTime} onChange={(e) => setCustomTime(e.target.value)} />
         </div>
         <div>
           <label className="label">背景テンプレート</label>
