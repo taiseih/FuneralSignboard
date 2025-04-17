@@ -3,16 +3,16 @@ import html2canvas from 'html2canvas'
 import { Button } from './components/Button'
 import './App.css'
 const backgroundImages = [
-  '/bg1.png',
-  '/bg2.png',
-  '/bg3.png',
-  '/bg4.png',
-  '/bg5.png',
-  '/bg6.png',
-  '/bg7.png',
-  '/bg8.png',
-  '/bg9.png',
-  '/38EAE8D8E62C1BFD715E571DBDEB46ADE38161FD.jpeg', // ← これが追加した画像
+  '/images(1).jpeg',
+  '/450-20210928114557411222.jpg',
+  '/450-20210928114633411222.jpg',
+  '/31466_sample.png',
+  '/83207_sample.png',
+  '/images(2).jpeg',
+  '/images(3).jpeg',
+  '/images.jpeg',
+  '/31466_sample.png',
+  '/38EAE8D8E62C1BFD715E571DBDEB46ADE38161FD.jpeg'
 ]
 
 const fontSizes = ['text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl']
