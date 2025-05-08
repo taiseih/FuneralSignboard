@@ -2,58 +2,8 @@ import React, { useState, useRef } from 'react'
 import html2canvas from 'html2canvas'
 import { Button } from './components/Button'
 import './App.css'
+import { backgroundImages, fontColors, fontFamilies, fontSizes } from './constants/const'
 
-// 背景画像のリスト
-const backgroundImages = [
-  '/images(1).jpeg',
-  '/450-20210928114557411222.jpg',
-  '/450-20210928114633411222.jpg',
-  '/31466_sample.png',
-  '/83207_sample.png',
-  '/images(2).jpeg',
-  '/images(3).jpeg',
-  '/images.jpeg',
-  '/31466_sample.png',
-  '/38EAE8D8E62C1BFD715E571DBDEB46ADE38161FD.jpeg'
-]
-
-// 利用可能なフォントのリスト
-const fontFamilies = [
-  { name: '明朝体', value: "'Shippori Mincho', serif" },
-  { name: 'ゴシック体', value: "'Noto Sans JP', sans-serif" },
-  { name: '筆文字風', value: "'Klee One', cursive" },
-  { name: '丸ゴシック', value: "'M PLUS Rounded 1c', sans-serif" },
-  { name: '教科書体', value: "'BIZ UDGothic', sans-serif" },
-  { name: '毛筆体', value: "'Zen Kaku Gothic New', sans-serif" }
-]
-
-// 文字サイズのオプション
-const fontSizes = [
-  { name: '極小', value: '16px' },
-  { name: '小', value: '24px' },
-  { name: '中', value: '36px' },
-  { name: '大', value: '48px' },
-  { name: '特大', value: '64px' },
-  { name: '超特大', value: '80px' }
-]
-
-// 文字色のオプション
-const fontColors = [
-  { name: '黒', value: '#000000' },
-  { name: '白', value: '#FFFFFF' },
-  { name: '赤', value: '#FF0000' },
-  { name: '青', value: '#0000FF' },
-  { name: '金', value: '#FFD700' },
-  { name: '銀', value: '#C0C0C0' }
-]
-
-// 日付位置のオプション
-const datePositions = [
-  { name: '左上', value: 'top-left' },
-  { name: '右上', value: 'top-right' },
-  { name: '左下', value: 'bottom-left' },
-  { name: '右下', value: 'bottom-right' }
-]
 
 const App: React.FC = () => {
   const [lastName, setLastName] = useState('')
@@ -61,11 +11,14 @@ const App: React.FC = () => {
   const [background, setBackground] = useState<string>(backgroundImages[0])
   const [customDate, setCustomDate] = useState<string>(() => {
     const today = new Date()
-    return new Intl.DateTimeFormat('ja-JP-u-ca-japanese', {
-      era: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    }).format(today)
+    const formattedDate = `${String(today.getMonth() + 1).padStart(2, '')}月${String(today.getDate()).padStart(2, '')}日`
+    return formattedDate
   })
-  const [customTime, setCustomTime] = useState<string>('')
+  const [customTime, setCustomTime] = useState<string>('12時00分〜13時00分')
+
+  // 通夜・告別式のテキスト
+  const wakeText = '通夜'
+  const funeralText = '告別式'
 
   // 新しいステート変数
   const [nameFont, setNameFont] = useState<string>(fontFamilies[0].value)
@@ -74,7 +27,6 @@ const App: React.FC = () => {
   const [dateSize, setDateSize] = useState<string>(fontSizes[2].value)
   const [nameColor, setNameColor] = useState<string>(fontColors[0].value)
   const [dateColor, setDateColor] = useState<string>(fontColors[0].value)
-  const [datePosition, setDatePosition] = useState<string>(datePositions[0].value)
   const [nameStroke, setNameStroke] = useState<boolean>(false)
   const [dateStroke, setDateStroke] = useState<boolean>(false)
   const [strokeColor, setStrokeColor] = useState<string>('#FFFFFF')
@@ -93,20 +45,6 @@ const App: React.FC = () => {
       link.download = 'preview.png'
       link.href = canvas.toDataURL('image/png')
       link.click()
-    }
-  }
-
-  // 日付位置のスタイルを計算する関数
-  const getDatePositionStyle = () => {
-    switch (datePosition) {
-      case 'top-right':
-        return { top: '1rem', right: '1rem', left: 'auto' }
-      case 'bottom-left':
-        return { top: 'auto', bottom: '1rem', left: '1rem' }
-      case 'bottom-right':
-        return { top: 'auto', bottom: '1rem', right: '1rem', left: 'auto' }
-      default: // top-left または未定義の場合
-        return { top: '1rem', left: '1rem' }
     }
   }
 
@@ -142,7 +80,6 @@ const App: React.FC = () => {
           <div
             className="kanji-date vertical-text"
             style={{
-              ...getDatePositionStyle(),
               fontFamily: dateFont,
               fontSize: dateSize,
               color: dateColor,
@@ -150,7 +87,7 @@ const App: React.FC = () => {
               ...getTextStrokeStyle(dateStroke)
             }}
           >
-            {customDate} {customTime}
+            <div>{wakeText}・{funeralText} {customDate} {customTime}</div>
           </div>
 
           <div
@@ -182,7 +119,7 @@ const App: React.FC = () => {
           </div>
           <div>
             <label className="label">日付（漢字表記）</label>
-            <input type="text" className="input" value={customDate} onChange={(e) => setCustomDate(e.target.value)} />
+            <input type="date" className="input" value={customDate} onChange={(e) => setCustomDate(e.target.value)} />
           </div>
           <div>
             <label className="label">時刻（漢字表記）</label>
@@ -263,14 +200,6 @@ const App: React.FC = () => {
             <select className="input" value={dateColor} onChange={(e) => setDateColor(e.target.value)}>
               {fontColors.map((color, idx) => (
                 <option key={idx} value={color.value}>{color.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="label">位置</label>
-            <select className="input" value={datePosition} onChange={(e) => setDatePosition(e.target.value)}>
-              {datePositions.map((pos, idx) => (
-                <option key={idx} value={pos.value}>{pos.name}</option>
               ))}
             </select>
           </div>
